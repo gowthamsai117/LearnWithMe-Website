@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
+// Load worker as raw JS string and instantiate as classic Worker via Blob URL
+// so that importScripts() is available (needed for Pyodide CDN loading)
 // @ts-ignore
-import PyodideWorker from '../worker/pyodide.worker?worker';
+import PyodideWorkerCode from '../worker/pyodide.worker.js?raw';
+
 
 export interface RunResult {
   stdout: string;
@@ -23,13 +26,24 @@ function initSharedWorker() {
   isSharedWorkerInitializing = true;
   
   try {
-    sharedWorker = new PyodideWorker();
+    // Create a classic Worker via Blob URL so importScripts() works for Pyodide CDN
+    const blob = new Blob([PyodideWorkerCode], { type: 'text/javascript' });
+    const workerUrl = URL.createObjectURL(blob);
+    sharedWorker = new Worker(workerUrl, { type: 'classic' });
+    // Clean up blob URL after worker is created
+    URL.revokeObjectURL(workerUrl);
+
     sharedWorker.onmessage = (event: MessageEvent) => {
-      const { type } = event.data;
+      const { type, error } = event.data;
       if (type === 'ready') {
         isSharedWorkerReady = true;
         isSharedWorkerInitializing = false;
         readyListeners.forEach(listener => listener(true));
+      } else if (type === 'init_error') {
+        console.error('Pyodide failed to initialize:', error);
+        isSharedWorkerInitializing = false;
+        // Don't set ready=true, but stop showing the boot spinner
+        readyListeners.forEach(listener => listener(false));
       }
       messageListeners.forEach(listener => listener(event));
     };
@@ -83,6 +97,7 @@ export const usePyodide = () => {
   const runCode = (
     code: string,
     visualizerId?: string,
+    stdin?: string,
     onChunk?: (type: 'stdout' | 'stderr', text: string) => void
   ): Promise<RunResult> => {
     return new Promise((resolve) => {
@@ -157,7 +172,7 @@ export const usePyodide = () => {
       // Send execution request to worker
       initSharedWorker();
       const worker = sharedWorker!;
-      worker.postMessage({ action: 'run', code, visualizerId });
+      worker.postMessage({ action: 'run', code, visualizerId, stdin: stdin || '' });
     });
   };
 

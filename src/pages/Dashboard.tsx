@@ -86,17 +86,17 @@ export const Dashboard: React.FC = () => {
         <div className="glass-panel p-5 flex items-center justify-between gap-4 relative overflow-hidden">
           <div className="flex flex-col justify-between h-full min-w-0">
             <div>
-              <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest block mb-1">
+              <span className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-1">
                 Overall Progress
               </span>
-              <p className="text-xs text-text-muted mt-1 leading-relaxed">
+              <p className="text-sm text-text-muted mt-1 leading-relaxed">
                 You've completed <span className="text-text-primary font-bold font-mono">{overallPercentage}%</span> of your learning journey
               </p>
             </div>
             <div className="mt-4">
               <Link 
                 to={nextTopicPath}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-[11px] font-bold rounded-lg hover:bg-accent-hover transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-accent text-white text-xs font-bold rounded-lg hover:bg-accent-hover transition cursor-pointer"
               >
                 <span>Continue Learning</span>
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -137,7 +137,7 @@ export const Dashboard: React.FC = () => {
         <div className="glass-panel p-5 flex flex-col justify-between gap-3">
           <div className="flex justify-between items-start">
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+              <span className="text-xs font-bold text-text-muted uppercase tracking-widest">
                 Day Streak
               </span>
               <div className="flex items-baseline gap-1.5 mt-1">
@@ -145,7 +145,7 @@ export const Dashboard: React.FC = () => {
                 <span className="text-2xl font-bold font-mono text-text-primary tabular-nums">{streak}</span>
               </div>
             </div>
-            <span className="text-[10px] text-text-muted font-sans italic">Mon - Sun</span>
+            <span className="text-xs text-text-muted font-sans italic">Mon - Sun</span>
           </div>
 
           {/* Mini 7-Bar Chart */}
@@ -163,7 +163,7 @@ export const Dashboard: React.FC = () => {
                       style={{ height: `${heightPct}%` }}
                     />
                   </div>
-                  <span className="text-[9px] font-mono text-text-muted">{day[0]}</span>
+                  <span className="text-xs font-mono text-text-muted">{day[0]}</span>
                 </div>
               );
             })}
@@ -173,10 +173,10 @@ export const Dashboard: React.FC = () => {
         {/* Card 3: Achievements */}
         <div className="glass-panel p-5 flex flex-col justify-between gap-3">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+            <span className="text-xs font-bold text-text-muted uppercase tracking-widest">
               Achievements
             </span>
-            <Link to="/achievements" className="text-[10px] font-bold text-accent hover:underline">
+            <Link to="/achievements" className="text-xs font-bold text-accent hover:underline">
               View All
             </Link>
           </div>
@@ -202,12 +202,12 @@ export const Dashboard: React.FC = () => {
             })}
             
             {/* Overflow element */}
-            <div className="h-10 w-10 rounded-full border border-dashed border-panel-border bg-panel-border/20 flex items-center justify-center text-[10px] font-mono font-bold text-text-muted">
+            <div className="h-10 w-10 rounded-full border border-dashed border-panel-border bg-panel-border/20 flex items-center justify-center text-xs font-mono font-bold text-text-muted">
               +12
             </div>
           </div>
 
-          <p className="text-[10px] text-text-muted leading-relaxed font-sans italic">
+          <p className="text-xs text-text-muted leading-relaxed font-sans italic">
             Keep completing curriculum topics to unlock more badges.
           </p>
         </div>
@@ -216,7 +216,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Continue Learning row */}
       <div className="flex flex-col gap-4">
-        <h2 className="text-xs font-bold text-text-muted uppercase tracking-widest">
+        <h2 className="text-sm font-bold text-text-muted uppercase tracking-widest">
           Continue Learning
         </h2>
         
@@ -226,22 +226,21 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/phase/phase-1/variables-memory')}>
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-[9px] font-bold text-accent uppercase font-mono tracking-wider">// core_phase_1</span>
-                <h4 className="text-xs font-bold text-text-primary mt-1">Variables & Memory</h4>
+                <h4 className="text-sm font-bold text-text-primary mt-1">Variables & Memory</h4>
               </div>
-              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-xs">
+              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-sm">
                 💻
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-[10px] text-text-muted mb-1 font-mono">
+              <div className="flex justify-between text-xs text-text-muted mb-1 font-mono">
                 <span>Completed</span>
                 <span>{completedTopics.includes('variables-memory') ? '100%' : '75%'}</span>
               </div>
               <div className="w-full h-1 bg-panel-border rounded overflow-hidden">
                 <div className="h-full bg-accent" style={{ width: completedTopics.includes('variables-memory') ? '100%' : '75%' }} />
               </div>
-              <span className="text-[9px] text-text-muted font-mono block mt-2">Next: Dynamic Typing</span>
+              <span className="text-xs text-text-muted font-mono block mt-2">Next: Dynamic Typing</span>
             </div>
           </div>
 
@@ -250,22 +249,21 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/phase/phase-4/lists-creation')}>
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-[9px] font-bold text-accent uppercase font-mono tracking-wider">// core_phase_4</span>
-                <h4 className="text-xs font-bold text-text-primary mt-1">Lists in Python</h4>
+                <h4 className="text-sm font-bold text-text-primary mt-1">Lists in Python</h4>
               </div>
-              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-xs">
+              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-sm">
                 📁
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-[10px] text-text-muted mb-1 font-mono">
+              <div className="flex justify-between text-xs text-text-muted mb-1 font-mono">
                 <span>Completed</span>
                 <span>{completedTopics.includes('lists-creation') ? '100%' : '60%'}</span>
               </div>
               <div className="w-full h-1 bg-panel-border rounded overflow-hidden">
                 <div className="h-full bg-accent" style={{ width: completedTopics.includes('lists-creation') ? '100%' : '60%' }} />
               </div>
-              <span className="text-[9px] text-text-muted font-mono block mt-2">Next: List Methods</span>
+              <span className="text-xs text-text-muted font-mono block mt-2">Next: List Methods</span>
             </div>
           </div>
 
@@ -274,22 +272,21 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/dsa/binary-search')}>
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-[9px] font-bold text-accent uppercase font-mono tracking-wider">// dsa_searching</span>
-                <h4 className="text-xs font-bold text-text-primary mt-1">Binary Search</h4>
+                <h4 className="text-sm font-bold text-text-primary mt-1">Binary Search</h4>
               </div>
-              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-xs">
+              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-sm">
                 🔍
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-[10px] text-text-muted mb-1 font-mono">
+              <div className="flex justify-between text-xs text-text-muted mb-1 font-mono">
                 <span>Completed</span>
                 <span>{completedTopics.includes('binary-search') ? '100%' : '40%'}</span>
               </div>
               <div className="w-full h-1 bg-panel-border rounded overflow-hidden">
                 <div className="h-full bg-accent" style={{ width: completedTopics.includes('binary-search') ? '100%' : '40%' }} />
               </div>
-              <span className="text-[9px] text-text-muted font-mono block mt-2">Next: Lower Bound</span>
+              <span className="text-xs text-text-muted font-mono block mt-2">Next: Lower Bound</span>
             </div>
           </div>
 
@@ -298,22 +295,21 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/phase/phase-5/functions-def')}>
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-[9px] font-bold text-accent uppercase font-mono tracking-wider">// core_phase_5</span>
-                <h4 className="text-xs font-bold text-text-primary mt-1">Functions Basics</h4>
+                <h4 className="text-sm font-bold text-text-primary mt-1">Functions Basics</h4>
               </div>
-              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-xs">
+              <div className="h-6 w-6 rounded bg-[#2A233C] flex items-center justify-center text-accent text-sm">
                 ⚙️
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-[10px] text-text-muted mb-1 font-mono">
+              <div className="flex justify-between text-xs text-text-muted mb-1 font-mono">
                 <span>Completed</span>
                 <span>{completedTopics.includes('functions-def') ? '100%' : '32%'}</span>
               </div>
               <div className="w-full h-1 bg-panel-border rounded overflow-hidden">
                 <div className="h-full bg-accent" style={{ width: completedTopics.includes('functions-def') ? '100%' : '32%' }} />
               </div>
-              <span className="text-[9px] text-text-muted font-mono block mt-2">Next: Scope Rules</span>
+              <span className="text-xs text-text-muted font-mono block mt-2">Next: Scope Rules</span>
             </div>
           </div>
         </div>
@@ -322,10 +318,10 @@ export const Dashboard: React.FC = () => {
       {/* Your Learning Path Stepper */}
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-baseline">
-          <h2 className="text-xs font-bold text-text-muted uppercase tracking-widest">
+          <h2 className="text-sm font-bold text-text-muted uppercase tracking-widest">
             Your Learning Path
           </h2>
-          <Link to="/python-course" className="text-[10px] font-bold text-accent hover:underline uppercase tracking-wider">
+          <Link to="/python-course" className="text-xs font-bold text-accent hover:underline uppercase tracking-wider">
             View Full Roadmap
           </Link>
         </div>
@@ -362,10 +358,10 @@ export const Dashboard: React.FC = () => {
                   
                   {/* Label */}
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-[10px] font-bold text-text-primary truncate max-w-[90px]">
+                    <span className="text-xs font-bold text-text-primary truncate max-w-[90px]">
                       {p.name.replace(/Phase \d+:\s*/, '')}
                     </span>
-                    <span className="text-[9px] text-text-muted font-mono">
+                    <span className="text-xs text-text-muted font-mono">
                       {doneCount}/{p.topics.length}
                     </span>
                   </div>
@@ -378,7 +374,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Recommended For You */}
       <div className="flex flex-col gap-4">
-        <h2 className="text-xs font-bold text-text-muted uppercase tracking-widest">
+        <h2 className="text-sm font-bold text-text-muted uppercase tracking-widest">
           Recommended For You
         </h2>
         
@@ -388,19 +384,19 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/dsa/two-pointers')}>
             <div>
               <div className="flex justify-between items-start">
-                <span className="px-1.5 py-0.5 rounded bg-accent/15 text-accent text-[9px] font-bold uppercase font-mono tracking-wider">
+                <span className="px-2 py-0.5 rounded bg-accent/15 text-accent text-xs font-bold uppercase font-mono tracking-wider">
                   Arrays
                 </span>
-                <span className="text-[10px] text-text-muted font-mono font-bold">★ 4.8</span>
+                <span className="text-xs text-text-muted font-mono font-bold">★ 4.8</span>
               </div>
-              <h4 className="text-xs font-bold text-text-primary mt-2">Two Pointers Technique</h4>
-              <p className="text-[10px] text-text-muted mt-1 leading-relaxed font-sans">
+              <h4 className="text-sm font-bold text-text-primary mt-2">Two Pointers Technique</h4>
+              <p className="text-xs text-text-muted mt-1 leading-relaxed font-sans">
                 Master array searching optimizations with left/right indexing variables.
               </p>
             </div>
-            <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+            <div className="flex justify-between items-center text-xs font-bold uppercase">
               <span className="text-text-muted">DSA Traversal</span>
-              <span className="px-2 py-0.5 rounded bg-success/10 text-success text-[8px] font-bold">Beginner</span>
+              <span className="px-2.5 py-0.5 rounded bg-success/10 text-success text-xs font-bold">Beginner</span>
             </div>
           </div>
 
@@ -409,19 +405,19 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/phase/phase-4/dict-comprehension')}>
             <div>
               <div className="flex justify-between items-start">
-                <span className="px-1.5 py-0.5 rounded bg-accent/15 text-accent text-[9px] font-bold uppercase font-mono tracking-wider">
+                <span className="px-2 py-0.5 rounded bg-accent/15 text-accent text-xs font-bold uppercase font-mono tracking-wider">
                   Core Python
                 </span>
-                <span className="text-[10px] text-text-muted font-mono font-bold">★ 4.9</span>
+                <span className="text-xs text-text-muted font-mono font-bold">★ 4.9</span>
               </div>
-              <h4 className="text-xs font-bold text-text-primary mt-2">List Comprehensions</h4>
-              <p className="text-[10px] text-text-muted mt-1 leading-relaxed font-sans">
+              <h4 className="text-sm font-bold text-text-primary mt-2">List Comprehensions</h4>
+              <p className="text-xs text-text-muted mt-1 leading-relaxed font-sans">
                 Learn to compile list/dict creation operations in single inline lines.
               </p>
             </div>
-            <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+            <div className="flex justify-between items-center text-xs font-bold uppercase">
               <span className="text-text-muted">Advanced Syntax</span>
-              <span className="px-2 py-0.5 rounded bg-warning/10 text-warning text-[8px] font-bold">Intermediate</span>
+              <span className="px-2.5 py-0.5 rounded bg-warning/10 text-warning text-xs font-bold">Intermediate</span>
             </div>
           </div>
 
@@ -430,19 +426,19 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/dsa/recursion')}>
             <div>
               <div className="flex justify-between items-start">
-                <span className="px-1.5 py-0.5 rounded bg-accent/15 text-accent text-[9px] font-bold uppercase font-mono tracking-wider">
+                <span className="px-2 py-0.5 rounded bg-accent/15 text-accent text-xs font-bold uppercase font-mono tracking-wider">
                   Algorithms
                 </span>
-                <span className="text-[10px] text-text-muted font-mono font-bold">★ 4.7</span>
+                <span className="text-xs text-text-muted font-mono font-bold">★ 4.7</span>
               </div>
-              <h4 className="text-xs font-bold text-text-primary mt-2">Recursion Tree Traversal</h4>
-              <p className="text-[10px] text-text-muted mt-1 leading-relaxed font-sans">
+              <h4 className="text-sm font-bold text-text-primary mt-2">Recursion Tree Traversal</h4>
+              <p className="text-xs text-text-muted mt-1 leading-relaxed font-sans">
                 Understand calls winding and stack memory allocations.
               </p>
             </div>
-            <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+            <div className="flex justify-between items-center text-xs font-bold uppercase">
               <span className="text-text-muted">DSA - Recursion</span>
-              <span className="px-2 py-0.5 rounded bg-danger/10 text-danger text-[8px] font-bold">Advanced</span>
+              <span className="px-2.5 py-0.5 rounded bg-danger/10 text-danger text-xs font-bold">Advanced</span>
             </div>
           </div>
 
@@ -451,19 +447,19 @@ export const Dashboard: React.FC = () => {
                onClick={() => navigate('/phase/phase-7/file-io')}>
             <div>
               <div className="flex justify-between items-start">
-                <span className="px-1.5 py-0.5 rounded bg-accent/15 text-accent text-[9px] font-bold uppercase font-mono tracking-wider">
+                <span className="px-2 py-0.5 rounded bg-accent/15 text-accent text-xs font-bold uppercase font-mono tracking-wider">
                   Python Core
                 </span>
-                <span className="text-[10px] text-text-muted font-mono font-bold">★ 4.6</span>
+                <span className="text-xs text-text-muted font-mono font-bold">★ 4.6</span>
               </div>
-              <h4 className="text-xs font-bold text-text-primary mt-2">File Input & Output</h4>
-              <p className="text-[10px] text-text-muted mt-1 leading-relaxed font-sans">
+              <h4 className="text-sm font-bold text-text-primary mt-2">File Input & Output</h4>
+              <p className="text-xs text-text-muted mt-1 leading-relaxed font-sans">
                 Manage read and write buffers on local files using with context managers.
               </p>
             </div>
-            <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+            <div className="flex justify-between items-center text-xs font-bold uppercase">
               <span className="text-text-muted">File Streams</span>
-              <span className="px-2 py-0.5 rounded bg-success/10 text-success text-[8px] font-bold">Beginner</span>
+              <span className="px-2.5 py-0.5 rounded bg-success/10 text-success text-xs font-bold">Beginner</span>
             </div>
           </div>
         </div>

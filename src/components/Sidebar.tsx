@@ -87,7 +87,7 @@ export const Sidebar: React.FC = () => {
       className={`h-screen bg-panel border-r border-panel-border flex flex-col justify-between transition-all duration-300 ${
         collapsed ? 'w-16' : 'w-64'
       } flex-shrink-0 z-30 select-none`}
-      style={{ boxShadow: '4px 0 24px rgba(0,0,0,0.3)' }}
+      style={{ boxShadow: '4px 0 24px rgba(15, 23, 42, 0.05)' }}
     >
       {/* Upper Area */}
       <div className="flex-grow flex flex-col overflow-y-auto min-h-0">
@@ -96,7 +96,7 @@ export const Sidebar: React.FC = () => {
         <div className="h-16 flex items-center justify-between px-4 border-b border-panel-border">
           <Link to="/" className="flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #6C63FF 0%, #38BDF8 100%)', boxShadow: '0 4px 14px rgba(108,99,255,0.4)' }}
+              style={{ background: 'linear-gradient(135deg, var(--accent) 0%, var(--success) 100%)', boxShadow: '0 4px 14px var(--accent-glow)' }}
             >
               Py
             </div>
@@ -128,7 +128,7 @@ export const Sidebar: React.FC = () => {
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition ${
                   isActive('/') 
                     ? 'bg-accent/10 text-accent' 
-                    : 'text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50'
+                    : 'text-text-muted hover:text-text-primary hover:bg-panel-border/40'
                 }`}
               >
                 <LayoutDashboard className="h-4 w-4 flex-shrink-0" />
@@ -139,7 +139,7 @@ export const Sidebar: React.FC = () => {
             {/* PYTHON COURSE SECTION */}
             <div className="flex flex-col gap-1">
               {!collapsed && (
-                <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
+                <span className="text-xs font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
                   Python Course
                 </span>
               )}
@@ -156,7 +156,7 @@ export const Sidebar: React.FC = () => {
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition relative cursor-pointer ${
                         active 
                           ? 'bg-accent/10 text-accent font-semibold' 
-                          : 'text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50'
+                          : 'text-text-muted hover:text-text-primary hover:bg-panel-border/40'
                       }`}
                       onClick={() => {
                         if (!active) {
@@ -196,10 +196,10 @@ export const Sidebar: React.FC = () => {
                             <Link
                               key={t.id}
                               to={`/phase/${phase.id}/${t.id}`}
-                              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md text-[11px] transition ${
+                              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs transition ${
                                 isTopicActive
                                   ? 'bg-accent/15 text-accent font-semibold'
-                                  : 'text-text-muted hover:text-text-primary hover:bg-[#1C223C]/40'
+                                  : 'text-text-muted hover:text-text-primary hover:bg-panel-border/30'
                               }`}
                             >
                               {done
@@ -221,7 +221,7 @@ export const Sidebar: React.FC = () => {
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition ${
                   isActive('/python-course') 
                     ? 'bg-accent/10 text-accent' 
-                    : 'text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50'
+                    : 'text-text-muted hover:text-text-primary hover:bg-panel-border/40'
                 }`}
               >
                 <Workflow className="h-4 w-4 flex-shrink-0 rotate-90" />
@@ -232,7 +232,7 @@ export const Sidebar: React.FC = () => {
             {/* DSA TRACK SECTION */}
             <div className="flex flex-col gap-1">
               {!collapsed && (
-                <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
+                <span className="text-xs font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
                   DSA Track
                 </span>
               )}
@@ -241,7 +241,7 @@ export const Sidebar: React.FC = () => {
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition ${
                   isActive('/dsa-course') 
                     ? 'bg-accent/10 text-accent font-semibold' 
-                    : 'text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50'
+                    : 'text-text-muted hover:text-text-primary hover:bg-panel-border/40'
                 }`}
               >
                 <BrainCircuit className="h-4 w-4 flex-shrink-0" />
@@ -252,7 +252,7 @@ export const Sidebar: React.FC = () => {
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition ${
                   location.pathname.startsWith('/dsa-problems') || location.pathname.includes('/dsa/')
                     ? 'bg-accent/10 text-accent font-semibold' 
-                    : 'text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50'
+                    : 'text-text-muted hover:text-text-primary hover:bg-panel-border/40'
                 }`}
               >
                 <Terminal className="h-4 w-4 flex-shrink-0" />
@@ -260,14 +260,14 @@ export const Sidebar: React.FC = () => {
               </Link>
               <Link
                 to="/contest"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <Trophy className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Contests</span>}
               </Link>
               <Link
                 to="/visualizations"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <Compass className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Visualizations</span>}
@@ -277,27 +277,27 @@ export const Sidebar: React.FC = () => {
             {/* EXTRA SECTION */}
             <div className="flex flex-col gap-1">
               {!collapsed && (
-                <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
+                <span className="text-xs font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
                   Extra
                 </span>
               )}
               <Link
                 to="/projects"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <FolderGit2 className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Projects</span>}
               </Link>
               <Link
                 to="/interview-prep"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <ShieldCheck className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Interview Prep</span>}
               </Link>
               <Link
                 to="/cheatsheets"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <BookMarked className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Cheatsheets</span>}
@@ -306,18 +306,18 @@ export const Sidebar: React.FC = () => {
 
             {/* Unlock Pro Promo Widget */}
             {!collapsed && (
-              <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-[#1A1E3A] to-[#14182E] border border-panel-border flex flex-col gap-3 relative overflow-hidden">
+              <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-[var(--panel-2)] to-panel border border-panel-border flex flex-col gap-3 relative overflow-hidden">
                 <div className="absolute -top-6 -right-6 w-16 h-16 rounded-full bg-accent/20 blur-xl" />
                 <div className="flex items-center gap-2">
-                  <div className="h-6 w-6 rounded bg-[#FBBF24]/10 flex items-center justify-center text-[#FBBF24]">
+                  <div className="h-6 w-6 rounded bg-accent/15 flex items-center justify-center text-accent">
                     <Sparkles className="h-3.5 w-3.5" />
                   </div>
                   <span className="text-xs font-bold text-text-primary">Unlock Pro</span>
                 </div>
-                <p className="text-[10px] text-text-muted leading-relaxed">
+                <p className="text-xs text-text-muted leading-relaxed">
                   Get unlimited access to all dynamic debug modules and problems.
                 </p>
-                <button className="w-full py-1.5 rounded-lg bg-accent text-white text-[10px] font-bold hover:bg-accent-hover transition cursor-pointer">
+                <button className="w-full py-1.5 rounded-lg bg-accent text-white text-xs font-bold hover:bg-accent-hover transition cursor-pointer">
                   Upgrade Now
                 </button>
               </div>
@@ -335,7 +335,7 @@ export const Sidebar: React.FC = () => {
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition ${
                   isActive('/') 
                     ? 'bg-accent/10 text-accent' 
-                    : 'text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50'
+                    : 'text-text-muted hover:text-text-primary hover:bg-panel-border/40'
                 }`}
               >
                 <LayoutDashboard className="h-4 w-4 flex-shrink-0" />
@@ -343,7 +343,7 @@ export const Sidebar: React.FC = () => {
               </Link>
               <Link
                 to="/explore"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <Compass className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Explore</span>}
@@ -353,48 +353,48 @@ export const Sidebar: React.FC = () => {
             {/* LEARNING */}
             <div className="flex flex-col gap-1">
               {!collapsed && (
-                <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
+                <span className="text-xs font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
                   Learning
                 </span>
               )}
               <Link
                 to="/python-course"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <BookOpen className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Python Course</span>}
               </Link>
               <Link
                 to="/dsa-course"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <BrainCircuit className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>DSA Course</span>}
               </Link>
               <Link
                 to="/projects"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <FolderKanban className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Projects</span>}
               </Link>
               <Link
                 to="/dsa-problems"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <Terminal className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Practice Problems</span>}
               </Link>
               <Link
                 to="/quizzes"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <FileCheck className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Quizzes</span>}
               </Link>
               <Link
                 to="/playground"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <Sparkles className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Playground</span>}
@@ -404,34 +404,34 @@ export const Sidebar: React.FC = () => {
             {/* RESOURCES */}
             <div className="flex flex-col gap-1">
               {!collapsed && (
-                <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
+                <span className="text-xs font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
                   Resources
                 </span>
               )}
               <Link
                 to="/cheatsheets"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <BookMarked className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Cheatsheets</span>}
               </Link>
               <Link
                 to="/notes"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <FileCheck className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Notes</span>}
               </Link>
               <Link
                 to="/roadmaps"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <TrendingUp className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Roadmaps</span>}
               </Link>
               <Link
                 to="/blogs"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <Compass className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Blogs</span>}
@@ -441,27 +441,27 @@ export const Sidebar: React.FC = () => {
             {/* COMMUNITY */}
             <div className="flex flex-col gap-1">
               {!collapsed && (
-                <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
+                <span className="text-xs font-bold text-text-muted/60 uppercase tracking-widest px-3 mb-1">
                   Community
                 </span>
               )}
               <Link
                 to="/contest"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <Trophy className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Contests</span>}
               </Link>
               <Link
                 to="/discussions"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <MessageSquare className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Discussions</span>}
               </Link>
               <Link
                 to="/leaderboard"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
               >
                 <TrendingUp className="h-4 w-4 flex-shrink-0" />
                 {!collapsed && <span>Leaderboard</span>}
@@ -475,14 +475,14 @@ export const Sidebar: React.FC = () => {
       <div className="p-3 flex flex-col gap-1.5 border-t border-panel-border">
         <Link
           to="/settings"
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
         >
           <Settings className="h-4 w-4 flex-shrink-0" />
           {!collapsed && <span>Settings</span>}
         </Link>
         <Link
           to="/help"
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-[#1C223C]/50"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-text-muted hover:text-text-primary hover:bg-panel-border/40"
         >
           <HelpCircle className="h-4 w-4 flex-shrink-0" />
           {!collapsed && <span>Help & Support</span>}
@@ -490,15 +490,15 @@ export const Sidebar: React.FC = () => {
         
         {/* User Card */}
         {!collapsed && (
-          <div className="mt-2 p-2.5 rounded-lg bg-[#141830] border border-panel-border flex items-center gap-2.5">
+          <div className="mt-2 p-2.5 rounded-lg bg-[var(--panel-2)] border border-panel-border flex items-center gap-2.5">
             <img
               src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Gowtham"
               alt="Gowtham"
-              className="h-8 w-8 rounded bg-[#1F2540] border border-panel-border"
+              className="h-8 w-8 rounded bg-[var(--panel)] border border-panel-border"
             />
             <div className="flex flex-col min-w-0">
               <span className="text-xs font-bold text-text-primary truncate">Gowtham Sai</span>
-              <span className="text-[10px] text-accent font-semibold font-mono">Level {level}</span>
+              <span className="text-xs text-accent font-semibold font-mono">Level {level}</span>
             </div>
           </div>
         )}

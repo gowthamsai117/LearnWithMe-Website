@@ -1,29 +1,19 @@
-/* eslint-disable no-restricted-globals */
-declare const importScripts: (...urls: string[]) => void;
-
-const ctx: Worker = self as any;
-let pyodide: any = null;
-
-// Initialize pyodide immediately on worker start
+const ctx = self;
+let pyodide = null;
 async function initPyodide() {
   try {
-    if (!(self as any).loadPyodide) {
-      importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js');
+    if (!self.loadPyodide) {
+      importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js");
     }
-    
-    pyodide = await (self as any).loadPyodide({
-      indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/',
+    pyodide = await self.loadPyodide({
+      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/"
     });
-    
-    // Inject JS print callbacks on the worker global scope
-    (self as any).sendStdout = (text: string) => {
-      ctx.postMessage({ type: 'stdout', content: text });
+    self.sendStdout = (text) => {
+      ctx.postMessage({ type: "stdout", content: text });
     };
-    (self as any).sendStderr = (text: string) => {
-      ctx.postMessage({ type: 'stderr', content: text });
+    self.sendStderr = (text) => {
+      ctx.postMessage({ type: "stderr", content: text });
     };
-    
-    // Configure default sys.stdout and sys.stderr redirections in Python
     await pyodide.runPythonAsync(`
 import sys
 import io
@@ -42,31 +32,25 @@ class CustomStderr(io.StringIO):
 sys.stdout = CustomStdout()
 sys.stderr = CustomStderr()
 `);
-    
-    // Notify main thread that the sandbox environment is ready
-    ctx.postMessage({ type: 'ready' });
-  } catch (err: any) {
-    ctx.postMessage({ type: 'init_error', error: err.message || String(err) });
+    ctx.postMessage({ type: "ready" });
+  } catch (err) {
+    ctx.postMessage({ type: "init_error", error: err.message || String(err) });
   }
 }
-
-ctx.addEventListener('message', async (event) => {
+ctx.addEventListener("message", async (event) => {
   const { code, action, visualizerId } = event.data;
-  
-  if (action === 'run') {
+  if (action === "run") {
     if (!pyodide) {
       ctx.postMessage({
-        type: 'result',
+        type: "result",
         success: false,
-        error: 'Python runtime is initializing. Please wait...'
+        error: "Python runtime is initializing. Please wait..."
       });
       return;
     }
-    
     try {
       pyodide.globals.set("user_code", code);
       pyodide.globals.set("visualizer_id", visualizerId || "");
-      
       await pyodide.runPythonAsync(`
 import sys
 import io
@@ -276,34 +260,29 @@ finally:
     if should_trace_vars:
         sys.settrace(None)
 `);
-      
-      const traceLogPy = pyodide.globals.get('trace_log');
-      const dsaEventsPy = pyodide.globals.get('dsa_events');
-      
+      const traceLogPy = pyodide.globals.get("trace_log");
+      const dsaEventsPy = pyodide.globals.get("dsa_events");
       const traceLog = traceLogPy ? traceLogPy.toJs({ depth: 10 }) : [];
       const dsaEvents = dsaEventsPy ? dsaEventsPy.toJs({ depth: 10 }) : [];
-      
-      const stdout = pyodide.runPython('sys.stdout.getvalue()');
-      const stderr = pyodide.runPython('sys.stderr.getvalue()');
-      const exceptionOccurred = pyodide.globals.get('exception_occurred');
-      
+      const stdout = pyodide.runPython("sys.stdout.getvalue()");
+      const stderr = pyodide.runPython("sys.stderr.getvalue()");
+      const exceptionOccurred = pyodide.globals.get("exception_occurred");
       ctx.postMessage({
-        type: 'result',
+        type: "result",
         success: !exceptionOccurred,
         stdout,
         stderr,
         trace: traceLog,
         events: dsaEvents,
-        error: exceptionOccurred || undefined
+        error: exceptionOccurred || void 0
       });
-    } catch (err: any) {
+    } catch (err) {
       ctx.postMessage({
-        type: 'result',
+        type: "result",
         success: false,
         error: err.message || String(err)
       });
     }
   }
 });
-
 initPyodide();

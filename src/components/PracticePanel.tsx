@@ -1,10 +1,73 @@
 import React, { useState, useEffect } from 'react';
-import Editor from '@monaco-editor/react';
+import Editor, { type BeforeMount } from '@monaco-editor/react';
 import { usePyodide } from '../hooks/usePyodide';
 import { useProgress } from '../context/ProgressContext';
 import { Play, Square, RotateCcw, CheckCircle, Terminal, AlertCircle, Loader2 } from 'lucide-react';
 // @ts-ignore
 import confetti from 'canvas-confetti';
+
+// Module-level guard: Monaco completions only registered once
+let _monacoRegistered = false;
+
+const registerPythonCompletions: BeforeMount = (monaco) => {
+  if (_monacoRegistered) return;
+  _monacoRegistered = true;
+  const KEYWORDS = ['False','None','True','and','as','assert','async','await','break','class','continue','def','del','elif','else','except','finally','for','from','global','if','import','in','is','lambda','nonlocal','not','or','pass','raise','return','try','while','with','yield'];
+  const BUILTINS = ['print','input','len','range','int','str','float','bool','list','dict','set','tuple','type','isinstance','enumerate','zip','map','filter','sorted','reversed','sum','min','max','abs','round','pow','open','super'];
+  const SNIPPETS = [
+    { label: 'if', insert: 'if ${1:condition}:\n    ${2:pass}' },
+    { label: 'elif', insert: 'elif ${1:condition}:\n    ${2:pass}' },
+    { label: 'else', insert: 'else:\n    ${1:pass}' },
+    { label: 'for', insert: 'for ${1:item} in ${2:iterable}:\n    ${3:pass}' },
+    { label: 'while', insert: 'while ${1:condition}:\n    ${2:pass}' },
+    { label: 'def', insert: 'def ${1:name}(${2:params}):\n    ${3:pass}' },
+    { label: 'class', insert: 'class ${1:Name}:\n    def __init__(self):\n        ${2:pass}' },
+    { label: 'try', insert: 'try:\n    ${1:pass}\nexcept ${2:Exception} as e:\n    ${3:pass}' },
+    { label: 'print', insert: 'print(${1:value})' },
+    { label: 'input', insert: 'input(${1:"prompt: "})' },
+    { label: 'range', insert: 'range(${1:stop})' },
+    { label: 'enumerate', insert: 'enumerate(${1:iterable})' },
+  ];
+
+  monaco.languages.registerCompletionItemProvider('python', {
+    triggerCharacters: ['.', ' '],
+    provideCompletionItems: (model: any, position: any) => {
+      const word = model.getWordUntilPosition(position);
+      const range = { startLineNumber: position.lineNumber, endLineNumber: position.lineNumber, startColumn: word.startColumn, endColumn: word.endColumn };
+      const suggestions: any[] = [
+        ...KEYWORDS.map(kw => ({ label: kw, kind: monaco.languages.CompletionItemKind.Keyword, insertText: kw, range, detail: 'keyword' })),
+        ...BUILTINS.map(fn => ({ label: fn, kind: monaco.languages.CompletionItemKind.Function, insertText: fn, range, detail: 'builtin' })),
+        ...SNIPPETS.map(s => ({ label: s.label, kind: monaco.languages.CompletionItemKind.Snippet, insertText: s.insert, insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, range, detail: 'snippet' })),
+      ];
+      return { suggestions };
+    },
+  });
+
+  monaco.editor.defineTheme('pypath-dark', {
+    base: 'vs', inherit: true,
+    rules: [
+      { token: 'keyword', foreground: 'C2410C', fontStyle: 'bold' },
+      { token: 'support.function', foreground: 'C2410C' },
+      { token: 'string', foreground: '009378' },
+      { token: 'comment', foreground: '64748B', fontStyle: 'italic' },
+      { token: 'number', foreground: '009378' },
+      { token: 'variable', foreground: '0F172A' },
+      { token: 'identifier', foreground: '0F172A' },
+    ],
+    colors: {
+      'editor.background': '#F8FAFC',
+      'editor.foreground': '#0F172A',
+      'editor.lineHighlightBackground': '#F1F5F9',
+      'editorLineNumber.foreground': '#94A3B8',
+      'editorLineNumber.activeForeground': '#FC8A15',
+      'editorCursor.foreground': '#FC8A15',
+      'editor.selectionBackground': '#E2E8F0',
+      'editorSuggestWidget.background': '#FFFFFF',
+      'editorSuggestWidget.border': '#E2E8F0',
+      'editorSuggestWidget.selectedBackground': '#F1F5F9',
+    },
+  });
+};
 
 interface PracticePanelProps {
   topicId: string;
@@ -114,7 +177,7 @@ export const PracticePanel: React.FC<PracticePanelProps> = ({
           {/* Reset Code */}
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg border border-panel-border text-text-muted hover:text-text-primary hover:bg-[#1C223C] transition cursor-pointer"
+            className="p-1.5 rounded-lg border border-panel-border text-text-muted hover:text-text-primary hover:bg-panel-border/30 transition cursor-pointer"
             title="Reset code"
           >
             <RotateCcw className="h-3.5 w-3.5" />
@@ -166,28 +229,36 @@ export const PracticePanel: React.FC<PracticePanelProps> = ({
       <div className="flex-grow min-h-[220px] border-b border-panel-border relative">
         <Editor
           height="100%"
-          defaultLanguage="python"
-          theme="vs-dark"
+          language="python"
+          theme="pypath-dark"
           value={code}
           onChange={handleEditorChange}
+          beforeMount={registerPythonCompletions}
           options={{
             minimap: { enabled: false },
             fontSize: 13,
-            fontFamily: "var(--font-mono)",
+            fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+            fontLigatures: true,
             automaticLayout: true,
             tabSize: 4,
             padding: { top: 12, bottom: 12 },
             cursorBlinking: 'smooth',
             smoothScrolling: true,
             lineNumbersMinChars: 3,
-            scrollbar: {
-              verticalScrollbarSize: 6,
-              horizontalScrollbarSize: 6,
-            }
+            scrollbar: { verticalScrollbarSize: 5, horizontalScrollbarSize: 5 },
+            suggestOnTriggerCharacters: true,
+            quickSuggestions: { other: true, comments: false, strings: false },
+            snippetSuggestions: 'top',
+            suggest: { showKeywords: true, showSnippets: true, showFunctions: true },
+            wordBasedSuggestions: 'currentDocument',
+            autoIndent: 'full',
+            formatOnType: true,
+            bracketPairColorization: { enabled: true },
+            scrollBeyondLastLine: false,
           }}
         />
         {!isReady && (
-          <div className="absolute inset-0 bg-[#0A0D18]/85 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 z-30">
+          <div className="absolute inset-0 bg-[var(--code-bg)]/85 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 z-30">
             <Loader2 className="h-7 w-7 text-accent animate-spin" />
             <span className="text-xs font-mono text-text-muted">
               Initializing Python WASM Compiler...
@@ -197,7 +268,7 @@ export const PracticePanel: React.FC<PracticePanelProps> = ({
       </div>
 
       {/* Output Console Log */}
-      <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-panel-border h-[130px] bg-[#0A0D18] font-mono text-xs">
+      <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-panel-border h-[130px] bg-[var(--code-bg)] font-mono text-xs">
         
         {/* Left pane: Output logs */}
         <div className="flex flex-col h-full min-h-0">
@@ -212,10 +283,10 @@ export const PracticePanel: React.FC<PracticePanelProps> = ({
           </div>
           <div className="flex-grow p-3 overflow-y-auto select-text font-mono text-[11px] leading-relaxed">
             {stdout && (
-              <pre className="text-text-primary whitespace-pre-wrap">{stdout}</pre>
+              <pre className="text-[var(--code)] whitespace-pre-wrap">{stdout}</pre>
             )}
             {stderr && (
-              <pre className="text-warning whitespace-pre-wrap mt-1">[STDERR] {stderr}</pre>
+              <pre className="text-[#B45309] whitespace-pre-wrap mt-1">[STDERR] {stderr}</pre>
             )}
             {consoleError && (
               <div className="text-danger flex items-start gap-1.5 p-1 rounded font-mono">
@@ -240,7 +311,7 @@ export const PracticePanel: React.FC<PracticePanelProps> = ({
               placeholder="Enter input if required..."
               value={stdin}
               onChange={(e) => setStdin(e.target.value)}
-              className="w-full h-full bg-[#0A0D18] border border-panel-border px-3 py-1 rounded-lg text-xs text-text-primary placeholder-text-muted/30 focus:outline-none focus:border-accent font-mono"
+              className="w-full h-full bg-[var(--code-bg)] border border-panel-border px-3 py-1 rounded-lg text-xs text-text-primary placeholder-text-muted/30 focus:outline-none focus:border-accent font-mono"
             />
           </div>
         </div>
