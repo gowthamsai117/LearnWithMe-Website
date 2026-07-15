@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProgress } from '../context/ProgressContext';
 import { curriculum } from '../curriculum/curriculumData';
@@ -25,9 +25,11 @@ import {
   Circle,
   ChevronDown
 } from 'lucide-react';
+import gsap from 'gsap';
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
+
   const { xp, completedTopics } = useProgress();
   const [collapsed, setCollapsed] = useState(false);
   const [expandedPhases, setExpandedPhases] = useState<Set<string>>(new Set());
@@ -66,23 +68,40 @@ export const Sidebar: React.FC = () => {
   // A phase shows topics if it's active OR manually expanded
   const isPhaseOpen = (phaseId: string) => isPhaseActive(phaseId) || expandedPhases.has(phaseId);
 
+  // GSAP entrance
+  const sidebarRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    gsap.fromTo(sidebarRef.current,
+      { x: -30, opacity: 0 },
+      { x: 0,   opacity: 1, duration: 0.6, ease: 'power3.out' }
+    );
+    gsap.fromTo('.sidebar-nav-item',
+      { x: -16, opacity: 0 },
+      { x: 0,   opacity: 1, duration: 0.4, ease: 'power2.out', stagger: 0.04, delay: 0.2 }
+    );
+  }, []);
+
   return (
-    <aside 
+    <aside
+      ref={sidebarRef}
       className={`h-screen bg-panel border-r border-panel-border flex flex-col justify-between transition-all duration-300 ${
         collapsed ? 'w-16' : 'w-64'
       } flex-shrink-0 z-30 select-none`}
+      style={{ boxShadow: '4px 0 24px rgba(0,0,0,0.3)' }}
     >
       {/* Upper Area */}
       <div className="flex-grow flex flex-col overflow-y-auto min-h-0">
         
         {/* Brand Header */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-panel-border">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center font-bold text-white text-sm shadow shadow-accent/20">
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-xl flex items-center justify-center font-bold text-white text-sm flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #6C63FF 0%, #38BDF8 100%)', boxShadow: '0 4px 14px rgba(108,99,255,0.4)' }}
+            >
               Py
             </div>
             {!collapsed && (
-              <span className="font-display text-lg font-bold text-text-primary">
+              <span className="font-display text-base font-bold gradient-text tracking-tight">
                 PyPath
               </span>
             )}
@@ -90,10 +109,10 @@ export const Sidebar: React.FC = () => {
           
           <button 
             onClick={() => setCollapsed(!collapsed)}
-            className="p-1 rounded text-text-muted hover:text-text-primary hover:bg-[#1C223C] cursor-pointer"
+            className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-panel-border/50 transition-colors cursor-pointer"
             title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           >
-            <ChevronRight className={`h-4 w-4 transition-transform ${collapsed ? '' : 'rotate-180'}`} />
+            <ChevronRight className={`h-4 w-4 transition-transform duration-300 ${collapsed ? '' : 'rotate-180'}`} />
           </button>
         </div>
 

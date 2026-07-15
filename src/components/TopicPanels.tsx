@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { Topic, Phase } from '../curriculum/curriculumData';
 import { useNavigate } from 'react-router-dom';
 import { Play, ChevronRight, CheckCircle2, RotateCcw, Terminal } from 'lucide-react';
+import gsap from 'gsap';
 
 /* =========================================================
    Inline Markdown Renderer
@@ -43,7 +44,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
       if (part.startsWith('**') && part.endsWith('**'))
         return <strong key={idx} className="font-bold text-text-primary">{part.slice(2, -2)}</strong>;
       if (part.startsWith('`') && part.endsWith('`'))
-        return <code key={idx} className="bg-[#0A0D18] text-[#22C55E] px-1.5 py-0.5 rounded font-mono text-xs border border-panel-border">{part.slice(1, -1)}</code>;
+        return <code key={idx} className="bg-[var(--code-bg)] text-[var(--code-keyword)] px-1.5 py-0.5 rounded font-mono text-xs border border-panel-border">{part.slice(1, -1)}</code>;
       return part;
     });
 
@@ -54,9 +55,9 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
       if (inCodeBlock) {
         inCodeBlock = false;
         renderedElements.push(
-          <div key={`code-${i}`} className="bg-[#0A0D18] p-3 rounded-lg border border-panel-border my-3 relative overflow-x-auto">
-            <span className="absolute top-1.5 right-2 text-[7px] text-text-muted/40 font-mono uppercase tracking-wider">{codeBlockLang || 'code'}</span>
-            <pre className="text-sm font-mono text-[#22C55E] leading-relaxed"><code>{codeBlockLines.join('\n')}</code></pre>
+          <div key={`code-${i}`} className="bg-[var(--code-bg)] p-4 rounded-xl border border-panel-border my-4 relative overflow-x-auto">
+            <span className="absolute top-2 right-3 text-[7px] text-text-muted/40 font-mono uppercase tracking-widest">{codeBlockLang || 'code'}</span>
+            <pre className="text-sm font-mono text-[var(--code)] leading-relaxed"><code>{codeBlockLines.join('\n')}</code></pre>
           </div>
         );
         codeBlockLines = [];
@@ -214,6 +215,23 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
     setOutput('');
   };
 
+  // GSAP entrance animation on topic change
+  const leftColRef  = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(leftColRef.current,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }
+      );
+      gsap.fromTo(rightColRef.current,
+        { opacity: 0, scale: 0.96 },
+        { opacity: 1, scale: 1, duration: 0.55, delay: 0.1, ease: 'power3.out' }
+      );
+    });
+    return () => ctx.revert();
+  }, [topic.id]);
+
   return (
     <div
       ref={containerRef}
@@ -222,7 +240,7 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
     >
 
       {/* LEFT COLUMN — Topic explanation */}
-      <div className="flex flex-col gap-3 min-w-0 h-full" style={{ width: `${splitPct}%` }}>
+      <div ref={leftColRef} className="flex flex-col gap-3 min-w-0 h-full" style={{ width: `${splitPct}%` }}>
 
         {/* Content card — scrollable */}
         <div className="glass-panel flex flex-col flex-1 min-h-0 overflow-hidden">
@@ -255,10 +273,10 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
         <div className="flex gap-3 flex-shrink-0">
           <button
             onClick={onToggleComplete}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border transition cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border transition-all duration-200 cursor-pointer ${
               isCompleted
-                ? 'bg-success/15 text-success border-success/30 hover:bg-success/20'
-                : 'bg-panel border-panel-border text-text-primary hover:border-accent hover:text-accent'
+                ? 'bg-success/10 text-success border-success/30 hover:bg-success/15'
+                : 'bg-panel border-panel-border text-text-primary hover:border-accent/50 hover:text-accent hover:bg-accent/5'
             }`}
           >
             <CheckCircle2 className="h-4 w-4" />
@@ -268,7 +286,7 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
           <button
             onClick={() => nextTopicPath && navigate(nextTopicPath)}
             disabled={!nextTopicPath}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold bg-accent hover:bg-accent-hover text-white transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer ml-auto"
+            className="btn-accent flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer ml-auto"
           >
             Next Topic
             <ChevronRight className="h-4 w-4" />
@@ -293,7 +311,7 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
       </div>
 
       {/* RIGHT COLUMN — Python editor + output */}
-      <div className="flex flex-col gap-3 min-w-0 h-full" style={{ width: `${100 - splitPct}%` }}>
+      <div ref={rightColRef} className="flex flex-col gap-3 min-w-0 h-full" style={{ width: `${100 - splitPct}%` }}>
 
         {/* Editor card */}
         <div className="glass-panel flex flex-col flex-1 min-h-0 overflow-hidden">
@@ -320,7 +338,7 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
               <button
                 onClick={handleRun}
                 disabled={running}
-                className="flex items-center gap-1.5 px-3 py-1 rounded text-[10px] font-mono font-bold bg-accent hover:bg-accent-hover text-white transition disabled:opacity-50 cursor-pointer"
+                className="btn-accent flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-mono font-bold text-white disabled:opacity-50 cursor-pointer"
               >
                 <Play className="h-3 w-3" />
                 {running ? 'Running…' : 'Run'}
@@ -329,9 +347,9 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
           </div>
 
           {/* Code textarea */}
-          <div className="flex-1 min-h-0 overflow-hidden relative bg-[#0A0D18]">
-            {/* Line numbers overlay */}
-            <div className="absolute left-0 top-0 bottom-0 w-10 flex flex-col pt-3 pb-3 text-right pr-2 text-[11px] font-mono text-text-muted/25 select-none pointer-events-none overflow-hidden z-10 bg-[#0A0D18] border-r border-panel-border/40">
+          <div className="flex-1 min-h-0 overflow-hidden relative bg-[var(--code-bg)] rounded-b-xl">
+            {/* Line numbers */}
+            <div className="absolute left-0 top-0 bottom-0 w-10 flex flex-col pt-3 pb-3 text-right pr-2 text-[11px] font-mono text-[var(--text-faint)] select-none pointer-events-none overflow-hidden z-10 bg-[var(--code-bg)] border-r border-panel-border/30">
               {code.split('\n').map((_, i) => (
                 <span key={i} className="leading-[1.6rem]">{i + 1}</span>
               ))}
@@ -342,7 +360,7 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
               onChange={(e) => setCode(e.target.value)}
               onKeyDown={handleKeyDown}
               spellCheck={false}
-              className="absolute inset-0 w-full h-full pl-12 pr-3 pt-3 pb-3 bg-transparent text-[13px] font-mono text-[#22C55E] leading-[1.6rem] resize-none focus:outline-none caret-accent selection:bg-accent/30"
+              className="absolute inset-0 w-full h-full pl-12 pr-3 pt-3 pb-3 bg-transparent text-[13px] font-mono text-[var(--code)] leading-[1.6rem] resize-none focus:outline-none caret-accent selection:bg-accent/20"
               style={{ tabSize: 4 }}
             />
           </div>
@@ -365,7 +383,7 @@ export const TopicPanels: React.FC<TopicPanelsProps> = ({
           <div className="flex-1 overflow-y-auto px-4 py-3 min-h-0">
             {output ? (
               <pre className={`text-[12px] font-mono leading-relaxed whitespace-pre-wrap ${
-                output.startsWith('Error:') ? 'text-danger' : 'text-[#22C55E]'
+                output.startsWith('Error:') ? 'text-danger' : 'text-[var(--code)]'
               }`}>{output}</pre>
             ) : (
               <span className="text-[11px] font-mono text-text-muted/30 italic">
