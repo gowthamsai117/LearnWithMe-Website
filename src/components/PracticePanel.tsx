@@ -44,27 +44,19 @@ const registerPythonCompletions: BeforeMount = (monaco) => {
   });
 
   monaco.editor.defineTheme('pypath-dark', {
-    base: 'vs', inherit: true,
-    rules: [
-      { token: 'keyword', foreground: 'C2410C', fontStyle: 'bold' },
-      { token: 'support.function', foreground: 'C2410C' },
-      { token: 'string', foreground: '009378' },
-      { token: 'comment', foreground: '64748B', fontStyle: 'italic' },
-      { token: 'number', foreground: '009378' },
-      { token: 'variable', foreground: '0F172A' },
-      { token: 'identifier', foreground: '0F172A' },
-    ],
+    base: 'vs-dark', inherit: true,
+    rules: [], // Empty to keep official default VS Code / Monaco Python syntax colors!
     colors: {
-      'editor.background': '#F8FAFC',
-      'editor.foreground': '#0F172A',
-      'editor.lineHighlightBackground': '#F1F5F9',
-      'editorLineNumber.foreground': '#94A3B8',
+      'editor.background': '#0F172A',
+      'editor.foreground': '#F6F6F6',
+      'editor.lineHighlightBackground': '#1E293B',
+      'editorLineNumber.foreground': '#475569',
       'editorLineNumber.activeForeground': '#FC8A15',
       'editorCursor.foreground': '#FC8A15',
-      'editor.selectionBackground': '#E2E8F0',
-      'editorSuggestWidget.background': '#FFFFFF',
-      'editorSuggestWidget.border': '#E2E8F0',
-      'editorSuggestWidget.selectedBackground': '#F1F5F9',
+      'editor.selectionBackground': '#FC8A1533',
+      'editorSuggestWidget.background': '#0F172A',
+      'editorSuggestWidget.border': '#334155',
+      'editorSuggestWidget.selectedBackground': '#FC8A1533',
     },
   });
 };
@@ -118,7 +110,7 @@ export const PracticePanel: React.FC<PracticePanelProps> = ({
 
     // If stdin is populated, we can inject it into Pyodide sys.stdin
     // Pyodide worker supports injecting values if required.
-    const result = await runCode(code, visualizerId);
+    const result = await runCode(code, visualizerId, stdin);
 
     if (result.error) {
       setStdout('');

@@ -34,11 +34,11 @@
 }
 
 :root {
-  /* Light Theme Backgrounds (not fully white, soft warm slate-gray) */
-  --bg:           #F4F5F8;   /* very light soft blue-gray page background */
-  --panel:        #FFFFFF;   /* clean white cards for modern layout contrast */
-  --panel-2:      #EAECEF;   /* slightly darker slate-gray for selected/active elements */
-  --panel-border: #E2E8F0;   /* subtle borders */
+  /* Light Theme Backgrounds (Low White - Soft slate gray background, and warm off-white panels) */
+  --bg:           #E2E8F0;   /* low white, soft slate gray background (not stark white) */
+  --panel:        #FAFBFD;   /* soft off-white/gray-blue cards for low-white premium feel */
+  --panel-2:      #E8EEF5;   /* active tab/item background */
+  --panel-border: #CBD5E1;   /* medium slate borders for clarity */
 
   /* Accent — user's orange #FC8A15 */
   --accent:       #FC8A15;
@@ -51,18 +51,18 @@
   --danger:       #E11D48;   /* rose/red */
   --gold:         #FC8A15;
 
-  /* Text — slate for high readability on light backgrounds */
-  --text-primary: #1E293B;   /* slate-800 */
-  --text-muted:   #4B5563;   /* slate-600 */
-  --text-faint:   #94A3B8;   /* slate-400 */
+  /* Text — dark slate for high contrast on low white backgrounds */
+  --text-primary: #0F172A;   /* slate-900 */
+  --text-muted:   #334155;   /* slate-700 */
+  --text-faint:   #64748B;   /* slate-500 */
 
-  /* Code — premium light theme editor colors */
-  --code:         #0F172A;   /* dark slate for base code */
-  --code-bg:      #F8FAFC;   /* slate-50 background */
-  --code-keyword: #C2410C;   /* orange keywords */
-  --code-string:  #009378;   /* dark teal strings */
-  --code-number:  #009378;   /* dark teal numbers */
-  --code-comment: #64748B;   /* slate comments */
+  /* Code — visible dark slate background code editor (not white!) */
+  --code:         #F6F6F6;   /* user's white/light gray code */
+  --code-bg:      #0F172A;   /* deep dark slate (clearly visible coding panel) */
+  --code-keyword: #FC8A15;   /* orange keywords */
+  --code-string:  #1EE494;   /* bright green strings */
+  --code-number:  #1EE494;   /* bright green numbers */
+  --code-comment: #009378;   /* dark teal comments */
 }
 
 /* ============================================================

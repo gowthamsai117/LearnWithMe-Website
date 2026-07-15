@@ -51,7 +51,7 @@ sys.stderr = CustomStderr()
 }
 
 ctx.addEventListener('message', async (event) => {
-  const { code, action, visualizerId } = event.data;
+  const { code, action, visualizerId, stdin } = event.data;
   
   if (action === 'run') {
     if (!pyodide) {
@@ -66,6 +66,7 @@ ctx.addEventListener('message', async (event) => {
     try {
       pyodide.globals.set("user_code", code);
       pyodide.globals.set("visualizer_id", visualizerId || "");
+      pyodide.globals.set("stdin_data", stdin || "");
       
       await pyodide.runPythonAsync(`
 import sys
@@ -78,6 +79,9 @@ import traceback
 # Clear trace logs and event databases
 trace_log = []
 dsa_events = []
+
+# Mock standard input with user inputs
+sys.stdin = io.StringIO(stdin_data)
 
 # Truncate output buffers
 sys.stdout.truncate(0)
@@ -279,9 +283,8 @@ finally:
       
       const traceLogPy = pyodide.globals.get('trace_log');
       const dsaEventsPy = pyodide.globals.get('dsa_events');
-      
-      const traceLog = traceLogPy ? traceLogPy.toJs({ depth: 10 }) : [];
-      const dsaEvents = dsaEventsPy ? dsaEventsPy.toJs({ depth: 10 }) : [];
+      const traceLog = traceLogPy ? traceLogPy.toJs({ depth: 10, dict_converter: Object.fromEntries }) : [];
+      const dsaEvents = dsaEventsPy ? dsaEventsPy.toJs({ depth: 10, dict_converter: Object.fromEntries }) : [];
       
       const stdout = pyodide.runPython('sys.stdout.getvalue()');
       const stderr = pyodide.runPython('sys.stderr.getvalue()');

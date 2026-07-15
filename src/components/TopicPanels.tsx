@@ -84,48 +84,26 @@ const beforeMonacoMount: BeforeMount = (monaco) => {
     },
   });
 
-  // Python 3.12 color scheme — premium Light Theme
+  // Python 3.12 color scheme — Dark Slate Theme (inheriting standard Monaco Python colors)
   monaco.editor.defineTheme('python312', {
-    base: 'vs',
+    base: 'vs-dark',
     inherit: true,
-    rules: [
-      // keywords: for, if, while, def, class, return …
-      { token: 'keyword',              foreground: 'C2410C', fontStyle: 'bold' },
-      // built-in functions: print, input, int, range …
-      { token: 'support.function',     foreground: 'C2410C' },
-      // strings
-      { token: 'string',               foreground: '009378' },
-      { token: 'string.escape',        foreground: '009378' },
-      // numbers
-      { token: 'number',               foreground: '009378' },
-      { token: 'number.float',         foreground: '009378' },
-      // comments
-      { token: 'comment',              foreground: '64748B', fontStyle: 'italic' },
-      // identifiers / types
-      { token: 'type',                 foreground: '0F172A' },
-      { token: 'entity.name.function', foreground: '0F172A' },
-      // operators & punctuation
-      { token: 'delimiter',            foreground: '64748B' },
-      { token: 'operator',             foreground: '475569' },
-      // variables
-      { token: 'variable',             foreground: '0F172A' },
-      { token: 'identifier',           foreground: '0F172A' },
-    ],
+    rules: [], // Empty to preserve official, default VS Code / Monaco Python syntax colors!
     colors: {
-      'editor.background':              '#F8FAFC',
-      'editor.foreground':              '#0F172A',
-      'editor.lineHighlightBackground': '#F1F5F9',
-      'editorLineNumber.foreground':    '#94A3B8',
+      'editor.background':              '#0F172A',
+      'editor.foreground':              '#F6F6F6',
+      'editor.lineHighlightBackground': '#1E293B',
+      'editorLineNumber.foreground':    '#475569',
       'editorLineNumber.activeForeground': '#FC8A15',
       'editorCursor.foreground':        '#FC8A15',
-      'editor.selectionBackground':     '#E2E8F0',
-      'editorIndentGuide.background1':  '#E2E8F0',
-      'editorBracketMatch.background':  '#FC8A1522',
+      'editor.selectionBackground':     '#FC8A1533',
+      'editorIndentGuide.background1':  '#1E293B',
+      'editorBracketMatch.background':  '#FC8A1533',
       'editorBracketMatch.border':      '#FC8A15',
       // suggest widget
-      'editorSuggestWidget.background': '#FFFFFF',
-      'editorSuggestWidget.border':     '#E2E8F0',
-      'editorSuggestWidget.selectedBackground': '#F1F5F9',
+      'editorSuggestWidget.background': '#0F172A',
+      'editorSuggestWidget.border':     '#334155',
+      'editorSuggestWidget.selectedBackground': '#FC8A1533',
     },
   });
 };
@@ -144,13 +122,13 @@ const highlightLineTokens = (line: string, lineKey: number) => {
 
     const token = match[0];
     if (token.startsWith('"') || token.startsWith("'")) {
-      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#1EE494]">{token}</span>);
+      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#CE9178]">{token}</span>);
     } else if (/^\d+$/.test(token)) {
-      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#1EE494]">{token}</span>);
+      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#B5CEA8]">{token}</span>);
     } else if (PYTHON_KEYWORDS.includes(token)) {
-      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#FC8A15] font-bold">{token}</span>);
+      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#569CD6]">{token}</span>);
     } else if (PYTHON_BUILTINS.includes(token)) {
-      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#FC8A15]">{token}</span>);
+      tokens.push(<span key={`${lineKey}-${start}`} className="text-[#DCDCAA]">{token}</span>);
     } else {
       tokens.push(token);
     }
@@ -203,13 +181,13 @@ const highlightPython = (code: string): React.ReactNode[] => {
         const rest = line.slice(endIdx + 3);
         return (
           <div key={idx} className="min-h-[1.5rem] whitespace-pre">
-            <span className="text-[#009378] italic">{commentPart}</span>
+            <span className="text-[#6A9955] italic">{commentPart}</span>
             {highlightLineTokens(rest, idx)}
           </div>
         );
       } else {
         return (
-          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#009378] italic">
+          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#6A9955] italic">
             {line}
           </div>
         );
@@ -221,14 +199,14 @@ const highlightPython = (code: string): React.ReactNode[] => {
       const secondTriple = line.indexOf('"""', line.indexOf('"""') + 3);
       if (secondTriple !== -1) {
         return (
-          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#009378] italic">
+          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#6A9955] italic">
             {line}
           </div>
         );
       } else {
         inTripleDouble = true;
         return (
-          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#009378] italic">
+          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#6A9955] italic">
             {line}
           </div>
         );
@@ -239,14 +217,14 @@ const highlightPython = (code: string): React.ReactNode[] => {
       const secondTriple = line.indexOf("'''", line.indexOf("'''") + 3);
       if (secondTriple !== -1) {
         return (
-          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#009378] italic">
+          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#6A9955] italic">
             {line}
           </div>
         );
       } else {
         inTripleSingle = true;
         return (
-          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#009378] italic">
+          <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#6A9955] italic">
             {line}
           </div>
         );
@@ -255,7 +233,7 @@ const highlightPython = (code: string): React.ReactNode[] => {
 
     if (trimmed.startsWith('#')) {
       return (
-        <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#009378] italic">
+        <div key={idx} className="min-h-[1.5rem] whitespace-pre text-[#6A9955] italic">
           {line}
         </div>
       );
@@ -277,7 +255,7 @@ const highlightPython = (code: string): React.ReactNode[] => {
     return (
       <div key={idx} className="min-h-[1.5rem] whitespace-pre">
         {highlightLineTokens(codePart, idx)}
-        {commentPart && <span className="text-[#009378] italic">{commentPart}</span>}
+        {commentPart && <span className="text-[#6A9955] italic">{commentPart}</span>}
       </div>
     );
   });
@@ -334,7 +312,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
           out.push(
             <div key={`out-${i}`} className="my-5">
               <div className="text-base font-bold text-text-primary mb-2">Output</div>
-              <div className="bg-[#080A12] text-[#F6F6F6] p-5 rounded-xl border border-[#1A1E30] overflow-x-auto font-mono text-[15px] leading-relaxed">
+              <div className="bg-[var(--code-bg)] text-[var(--code)] p-5 rounded-xl border border-panel-border overflow-x-auto font-mono text-[15px] leading-relaxed">
                 <pre><code>{codeLines.join('\n')}</code></pre>
               </div>
             </div>
@@ -344,9 +322,9 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
           out.push(
             <div key={`c-${i}`} className="my-5">
               <div className="text-base font-bold text-text-primary mb-2">Code</div>
-              <div className="bg-[#080A12] p-5 rounded-xl border border-panel-border/30 relative overflow-x-auto font-mono text-[15px] leading-relaxed">
+              <div className="bg-[var(--code-bg)] p-5 rounded-xl border border-panel-border relative overflow-x-auto font-mono text-[15px] leading-relaxed">
                 <span className="absolute top-3 right-4 bg-accent/80 text-white text-[10px] font-bold font-sans px-2.5 py-1 rounded-full uppercase tracking-wider">PYTHON</span>
-                <pre className="text-text-primary">
+                <pre className="text-[var(--code)]">
                   <code>{highlightPython(codeLines.join('\n'))}</code>
                 </pre>
               </div>
